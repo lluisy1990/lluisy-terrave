@@ -1,0 +1,173 @@
+admin.html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Lluisy Terravè</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f2f6ef;
+ color:#263b29;
+}
+header{
+ background:#237a3b;
+ color:white;
+ padding:22px;
+ text-align:center;
+}
+main{
+ max-width:950px;
+ margin:25px auto;
+ padding:15px;
+}
+.card{
+ background:white;
+ padding:22px;
+ margin-bottom:20px;
+ border-radius:12px;
+ box-shadow:0 2px 10px #0001;
+}
+h2{color:#237a3b}
+input,textarea,button{
+ width:100%;
+ padding:13px;
+ margin:7px 0;
+ border:1px solid #ccc;
+ border-radius:7px;
+ font-size:16px;
+}
+button{
+ background:#237a3b;
+ color:white;
+ border:none;
+ cursor:pointer;
+ font-weight:bold;
+}
+button:hover{background:#185d2c}
+.product{
+ padding:12px;
+ border-bottom:1px solid #ddd;
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+ align-items:center;
+}
+.delete{background:#b52b2b;width:auto}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Lluisy Terravè</h1>
+<p>Panel de administración</p>
+</header>
+
+<main>
+
+<div class="card">
+<h2>Agregar productos</h2>
+
+<input id="name" placeholder="Nombre del producto">
+<input id="price" type="number" placeholder="Precio en dólares">
+<input id="image" placeholder="URL de fotografía">
+<textarea id="description" placeholder="Descripción del producto"></textarea>
+
+<button onclick="addProduct()">Guardar producto</button>
+</div>
+
+<div class="card">
+<h2>Mis productos</h2>
+<div id="products"></div>
+</div>
+
+<div class="card">
+<h2>Administración de la tienda</h2>
+<p>Lluisy Terravè - Come sano • Cuida de ti • Vive mejor</p>
+<p>Gestión de productos y catálogo.</p>
+</div>
+
+</main>
+
+<script>
+let products = JSON.parse(localStorage.getItem("lluisy_products") || "[]");
+
+function save(){
+ localStorage.setItem("lluisy_products",JSON.stringify(products));
+ render();
+}
+
+function addProduct(){
+ const name=document.getElementById("name").value.trim();
+ const price=document.getElementById("price").value;
+ const image=document.getElementById("image").value.trim();
+ const description=document.getElementById("description").value.trim();
+
+ if(!name || !price){
+  alert("Escribe el nombre y el precio.");
+  return;
+ }
+
+ products.push({
+  id:Date.now(),
+  name,
+  price,
+  image,
+  description
+ });
+
+ save();
+
+ document.getElementById("name").value="";
+ document.getElementById("price").value="";
+ document.getElementById("image").value="";
+ document.getElementById("description").value="";
+
+ alert("Producto guardado.");
+}
+
+function removeProduct(id){
+ if(confirm("¿Eliminar este producto?")){
+  products=products.filter(p=>p.id!==id);
+  save();
+ }
+}
+
+function render(){
+ const container=document.getElementById("products");
+ container.innerHTML="";
+
+ if(products.length===0){
+  container.innerHTML="<p>Todavía no hay productos.</p>";
+  return;
+ }
+
+ products.forEach(p=>{
+  const item=document.createElement("div");
+  item.className="product";
+
+  const info=document.createElement("div");
+  const title=document.createElement("strong");
+  title.textContent=p.name;
+  const price=document.createElement("p");
+  price.textContent="$"+p.price;
+  info.append(title,price);
+
+  const btn=document.createElement("button");
+  btn.className="delete";
+  btn.textContent="Eliminar";
+  btn.onclick=()=>removeProduct(p.id);
+
+  item.append(info,btn);
+  container.append(item);
+ });
+}
+
+render();
+</script>
+
+</body>
+</html>
