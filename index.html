@@ -4,222 +4,156 @@ index.html
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lluisy Terravè</title>
-
+<title>Lluisy Terravè | Tienda Online</title>
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f8ed;
-  color: #29452b;
-}
-
-header {
-  background: #276b37;
-  color: white;
-  text-align: center;
-  padding: 30px 15px;
-}
-
-header h1 {
-  font-size: 32px;
-  margin: 0;
-}
-
-header p {
-  margin-bottom: 0;
-}
-
-nav {
-  background: #e2edda;
-  padding: 15px;
-  text-align: center;
-}
-
-nav a {
-  color: #276b37;
-  text-decoration: none;
-  margin: 10px;
-  font-weight: bold;
-}
-
-.hero {
-  text-align: center;
-  padding: 45px 20px;
-  background: #dcebd0;
-}
-
-.hero h2 {
-  font-size: 28px;
-}
-
-button {
-  background: #276b37;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 7px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #174a26;
-}
-
-.products {
-  padding: 30px 15px;
-  text-align: center;
-}
-
-.catalog {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 20px;
-  max-width: 1000px;
-  margin: auto;
-}
-
-.product {
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 8px #00000012;
-}
-
-.product .picture {
-  font-size: 65px;
-  padding: 15px;
-}
-
-.price {
-  color: #276b37;
-  font-size: 21px;
-  font-weight: bold;
-}
-
-.cart {
-  background: #e2edda;
-  padding: 30px 15px;
-  text-align: center;
-}
-
-footer {
-  background: #276b37;
-  color: white;
-  text-align: center;
-  padding: 25px;
-}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;color:#263b2b;background:#fff}
+header{background:#245d36;color:white;text-align:center;padding:25px 12px}
+header h1{margin:0;font-size:32px}
+header p{margin:8px 0 0}
+nav{display:flex;justify-content:center;flex-wrap:wrap;gap:20px;padding:16px;background:#edf4e9}
+nav a{color:#245d36;text-decoration:none;font-weight:bold}
+.hero{text-align:center;padding:65px 18px;background:linear-gradient(120deg,#e1efd9,#f6f8ed)}
+.hero h2{font-size:32px;margin:0 0 12px}
+.hero p{font-size:17px}
+.btn{background:#28653a;color:white;border:0;border-radius:8px;padding:13px 22px;font-weight:bold;cursor:pointer}
+.section{padding:35px 15px;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px;max-width:1050px;margin:25px auto}
+.card{padding:22px;background:#f5f8f1;border-radius:12px;box-shadow:0 2px 8px #0001}
+.emoji{font-size:55px}
+.card h3{margin:12px 0}
+.price{font-size:22px;font-weight:bold;color:#26713c}
+input{padding:12px;border:1px solid #bbb;border-radius:7px;width:min(90%,350px);margin:10px}
+.cart{background:#edf4e9;padding:30px 15px;text-align:center}
+footer{background:#245d36;color:white;text-align:center;padding:25px}
 </style>
 </head>
-
 <body>
 
 <header>
-  <h1>🌿 Lluisy Terravè</h1>
-  <p>Come sano • Cuida de ti • Vive mejor</p>
+<h1>🌿 Lluisy Terravè</h1>
+<p>Come sano • Cuida de ti • Vive mejor</p>
 </header>
 
 <nav>
-  <a href="#inicio">Inicio</a>
-  <a href="#productos">Productos</a>
-  <a href="#carrito">Carrito</a>
+<a href="#inicio">Inicio</a>
+<a href="#categorias">Categorías</a>
+<a href="#productos">Productos</a>
+<a href="#ofertas">Ofertas</a>
+<a href="#carrito">🛒 Carrito</a>
 </nav>
 
 <section class="hero" id="inicio">
-  <h2>Bienvenido a Lluisy Terravè</h2>
-  <p>Descubre productos naturales para tu hogar, tu jardín y tu bienestar.</p>
-  <a href="#productos">
-    <button>Ver productos</button>
-  </a>
+<h2>Bienvenido a Lluisy Terravè</h2>
+<p>Descubre productos para tu hogar, belleza, jardín y bienestar.</p>
+<a href="#productos"><button class="btn">Comprar ahora</button></a>
 </section>
 
-<section class="products" id="productos">
-  <h2>Nuestros productos</h2>
+<section class="section" id="categorias">
+<h2>Explora nuestras categorías</h2>
+<div class="grid">
+<div class="card"><div class="emoji">🌻</div><h3>Jardinería y semillas</h3></div>
+<div class="card"><div class="emoji">🧼</div><h3>Jabones naturales</h3></div>
+<div class="card"><div class="emoji">🌿</div><h3>Belleza y cuidado</h3></div>
+<div class="card"><div class="emoji">🏡</div><h3>Hogar y naturaleza</h3></div>
+</div>
+</section>
 
-  <div class="catalog">
+<section class="section" id="productos">
+<h2>Nuestros productos</h2>
+<input type="search" id="search" placeholder="Buscar productos..." oninput="searchProducts()">
+<div class="grid" id="productGrid">
 
-    <div class="product">
-      <div class="picture">🌱</div>
-      <h3>Kit de jardinería</h3>
-      <p>Todo para comenzar tu jardín.</p>
-      <p class="price">$19.99</p>
-      <button onclick="addToCart('Kit de jardinería',19.99)">
-        Agregar al carrito
-      </button>
-    </div>
+<div class="card product">
+<div class="emoji">🌱</div>
+<h3>Kit de jardinería</h3>
+<p>Comienza tu propio jardín.</p>
+<p class="price">$19.99</p>
+<button class="btn" onclick="add('Kit de jardinería',19.99)">Agregar al carrito</button>
+</div>
 
-    <div class="product">
-      <div class="picture">🌻</div>
-      <h3>Semillas de flores</h3>
-      <p>Llena tu jardín de color y naturaleza.</p>
-      <p class="price">$4.99</p>
-      <button onclick="addToCart('Semillas de flores',4.99)">
-        Agregar al carrito
-      </button>
-    </div>
+<div class="card product">
+<div class="emoji">🌻</div>
+<h3>Semillas de flores</h3>
+<p>Flores para llenar tu jardín de color.</p>
+<p class="price">$4.99</p>
+<button class="btn" onclick="add('Semillas de flores',4.99)">Agregar al carrito</button>
+</div>
 
-    <div class="product">
-      <div class="picture">🧼</div>
-      <h3>Jabón natural</h3>
-      <p>Un detalle natural para cuidar tu piel.</p>
-      <p class="price">$7.99</p>
-      <button onclick="addToCart('Jabón natural',7.99)">
-        Agregar al carrito
-      </button>
-    </div>
+<div class="card product">
+<div class="emoji">🧼</div>
+<h3>Jabón natural</h3>
+<p>Jabón artesanal.</p>
+<p class="price">$7.99</p>
+<button class="btn" onclick="add('Jabón natural',7.99)">Agregar al carrito</button>
+</div>
 
-  </div>
+</div>
+</section>
+
+<section class="section" id="ofertas">
+<h2>🔥 Ofertas especiales</h2>
+<div class="grid">
+<div class="card">
+<div class="emoji">🌷</div>
+<h3>Oferta de temporada</h3>
+<p>Próximamente nuevos descuentos.</p>
+<p class="price">¡Grandes ofertas!</p>
+</div>
+</div>
 </section>
 
 <section class="cart" id="carrito">
-  <h2>🛒 Mi carrito</h2>
-  <div id="cartItems">Tu carrito está vacío.</div>
-  <h3 id="total">Total: $0.00</h3>
-  <button onclick="checkout()">Continuar al pedido</button>
+<h2>🛒 Mi carrito</h2>
+<div id="cartItems">Tu carrito está vacío.</div>
+<h3 id="total">Total: $0.00</h3>
+<button class="btn" onclick="checkout()">Continuar</button>
 </section>
 
 <footer>
-  <h3>Lluisy Terravè 🌿</h3>
-  <p>Come sano • Cuida de ti • Vive mejor</p>
-  <p>Gracias por visitar nuestra tienda.</p>
+<h2>Lluisy Terravè 🌿</h2>
+<p>Come sano • Cuida de ti • Vive mejor</p>
+<p>Gracias por elegirnos.</p>
 </footer>
 
 <script>
-let cart = [];
+let cart=[];
 
-function addToCart(name, price) {
-  cart.push({name, price});
-  showCart();
+function add(name,price){
+cart.push({name,price});
+showCart();
 }
 
-function showCart() {
-  let items = document.getElementById("cartItems");
-  let total = 0;
-
-  if (cart.length === 0) {
-    items.innerHTML = "Tu carrito está vacío.";
-  } else {
-    items.innerHTML = cart.map(item => {
-      total += item.price;
-      return `<p>${item.name} - $${item.price.toFixed(2)}</p>`;
-    }).join("");
-  }
-
-  document.getElementById("total").textContent =
-    "Total: $" + total.toFixed(2);
+function showCart(){
+let total=0;
+let html='';
+cart.forEach((item,index)=>{
+total+=item.price;
+html+=`<p>${item.name} - $${item.price.toFixed(2)}
+<button onclick="removeItem(${index})">Eliminar</button></p>`;
+});
+document.getElementById('cartItems').innerHTML=html||'Tu carrito está vacío.';
+document.getElementById('total').textContent='Total: $'+total.toFixed(2);
 }
 
-function checkout() {
-  if (cart.length === 0) {
-    alert("Agrega productos primero.");
-    return;
-  }
+function removeItem(index){
+cart.splice(index,1);
+showCart();
+}
 
-  alert("Tu carrito está preparado. Próximamente habilitaremos los pagos.");
+function checkout(){
+if(!cart.length){
+alert('Agrega productos primero.');
+return;
+}
+alert('Tu pedido está preparado. Próximamente habilitaremos los pagos.');
+}
+
+function searchProducts(){
+let value=document.getElementById('search').value.toLowerCase();
+document.querySelectorAll('.product').forEach(product=>{
+product.style.display=product.innerText.toLowerCase().includes(value)?'block':'none';
+});
 }
 </script>
 
