@@ -1,196 +1,285 @@
-admin.html
+admin.htm
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Administración | Lluisy Terravè</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f2f7ef;color:#263b29}
-header{background:#176b38;color:white;text-align:center;padding:25px}
-main{max-width:900px;margin:25px auto;padding:15px}
-.panel{background:white;padding:22px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 10px #0001}
-h2{color:#176b38}
-input,textarea,button{width:100%;padding:13px;margin:8px 0;border-radius:7px;font-size:15px}
-input,textarea{border:1px solid #ccc}
-button{border:0;background:#176b38;color:white;font-weight:bold;cursor:pointer}
-.danger{background:#b52b2b}
-.secondary{background:#777}
-.product{border:1px solid #ddd;padding:15px;border-radius:8px;margin:12px 0}
-.product img{max-width:120px;display:block;margin:10px 0}
-#dashboard{display:none}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lluisy Terravè | Administración</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f1f7ef;
+      color: #263b29;
+    }
+    header {
+      background: #176b38;
+      color: white;
+      padding: 22px;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    h1 { margin: 0 0 8px; }
+    .panel {
+      max-width: 850px;
+      margin: auto;
+      background: white;
+      padding: 22px;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px #00000012;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 12px;
+      margin: 7px 0;
+      border: 1px solid #ccd8ca;
+      border-radius: 7px;
+      font-size: 15px;
+    }
+    button {
+      background: #176b38;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover { background: #10542b; }
+    .secondary { background: #526b57; }
+    .danger { background: #b52d2d; }
+    .product {
+      border: 1px solid #dce6da;
+      padding: 15px;
+      border-radius: 9px;
+      margin-top: 12px;
+    }
+    .product img {
+      max-width: 100px;
+      display: block;
+      margin: 8px 0;
+    }
+    .hidden { display: none; }
+    #message { margin: 12px 0; font-weight: bold; }
+  </style>
 </head>
 <body>
+
 <header>
-<h1>Lluisy Terravè</h1>
-<p>Come sano • Cuida de ti • Vive mejor</p>
-<p>Panel profesional de administración</p>
+  <h1>Lluisy Terravè</h1>
+  <p>Panel profesional de administración</p>
 </header>
-<main>
-<section class="panel" id="login">
-<h2>Acceso administrativo</h2>
-<input id="email" type="email" placeholder="Correo electrónico">
-<input id="password" type="password" placeholder="Contraseña">
-<button onclick="loginAdmin()">Iniciar sesión</button>
-<p id="loginMessage"></p>
-</section>
-<section id="dashboard">
-<div class="panel">
-<h2>Panel de control</h2>
-<p>Bienvenido a tu tienda Lluisy Terravè.</p>
-<button class="secondary" onclick="logoutAdmin()">Cerrar sesión</button>
-</div>
-<div class="panel">
-<h2>Agregar producto</h2>
-<input id="productName" placeholder="Nombre del producto">
-<textarea id="description" placeholder="Descripción del producto"></textarea>
-<input id="price" type="number" step="0.01" placeholder="Precio">
-<input id="image" placeholder="URL de imagen">
-<input id="category" placeholder="Categoría">
-<button onclick="addProduct()">Guardar producto</button>
-<p id="message"></p>
-</div>
-<div class="panel">
-<h2>Productos de la tienda</h2>
-<button onclick="loadProducts()">Actualizar productos</button>
-<div id="products"></div>
-</div>
-</section>
+
+<main class="panel">
+  <section id="login">
+    <h2>Iniciar sesión</h2>
+    <input id="email" type="email" placeholder="Correo electrónico">
+    <input id="password" type="password" placeholder="Contraseña">
+    <button onclick="login()">Entrar</button>
+    <div id="message"></div>
+  </section>
+
+  <section id="admin" class="hidden">
+    <h2>Administrar productos</h2>
+    <button class="secondary" onclick="logout()">Cerrar sesión</button>
+
+    <h3>Agregar o editar producto</h3>
+    <input id="productId" type="text" placeholder="ID del producto">
+    <input id="name" type="text" placeholder="Nombre del producto">
+    <input id="price" type="number" step="0.01" placeholder="Precio">
+    <input id="category" type="text" placeholder="Categoría">
+    <input id="image" type="url" placeholder="URL de imagen">
+    <textarea id="description" placeholder="Descripción del producto"></textarea>
+
+    <button onclick="saveProduct()">Guardar producto</button>
+    <button class="secondary" onclick="clearForm()">Limpiar formulario</button>
+
+    <h3>Productos de la tienda</h3>
+    <div id="products"></div>
+  </section>
 </main>
-<!-- PARTE 2 DE 2 -->
-
-<section id="products">
-  <h2>Administrar productos</h2>
-
-  <form id="productForm">
-    <input id="productName" type="text"
-      placeholder="Nombre del producto" required>
-
-    <input id="productPrice" type="number"
-      placeholder="Precio" step="0.01" required>
-
-    <input id="productStock" type="number"
-      placeholder="Cantidad disponible" required>
-
-    <input id="productImage" type="url"
-      placeholder="URL de la imagen">
-
-    <button type="submit">Guardar producto</button>
-  </form>
-
-  <div id="productList"></div>
-</section>
-
-<section id="orders">
-  <h2>Pedidos de clientes</h2>
-  <div id="orderList">
-    <p>Los pedidos aparecerán aquí.</p>
-  </div>
-</section>
-
-<section id="settings">
-  <h2>Configuración de la tienda</h2>
-  <p>Lluisy Terravè</p>
-  <p>Come sano • Cuida de ti • Vive mejor</p>
-</section>
-
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f3f8ef;
-    color: #263b20;
-    padding: 20px;
-  }
-
-  h1, h2 {
-    color: #27852c;
-  }
-
-  section {
-    background: white;
-    padding: 18px;
-    margin: 15px 0;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px #0001;
-  }
-
-  input {
-    display: block;
-    width: 95%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 7px;
-  }
-
-  button {
-    background: #27852c;
-    color: white;
-    border: none;
-    padding: 12px 18px;
-    border-radius: 7px;
-    cursor: pointer;
-  }
-</style>
-
+</body>
+</html>
+l 
 <script>
-  const form = document.getElementById("productForm");
-  const productList = document.getElementById("productList");
+const SUPABASE_URL = "https://fmbveycuiajptmmnpqgm.supabase.co";
+const SUPABASE_KEY = "sb_publishable_mEGY6er_z4DK6pwvpiTDtw_ouqp_yAH";
 
-  let products = JSON.parse(
-    localStorage.getItem("lluisyProducts") || "[]"
-  );
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
-  function showProducts() {
-    productList.innerHTML = "";
+const TABLE = "products";
 
-    products.forEach((product, index) => {
-      const item = document.createElement("div");
+function message(text) {
+  document.getElementById("message").textContent = text;
+}
 
-      item.innerHTML = `
-        <h3>${product.name}</h3>
-        <p>Precio: $${product.price}</p>
-        <p>Inventario: ${product.stock}</p>
-        <button onclick="deleteProduct(${index})">
-          Eliminar
-        </button>
-        <hr>
-      `;
+async function login() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-      productList.appendChild(item);
-    });
-  }
-
-  function deleteProduct(index) {
-    products.splice(index, 1);
-    localStorage.setItem(
-      "lluisyProducts",
-      JSON.stringify(products)
-    );
-    showProducts();
-  }
-
-  form.addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    products.push({
-      name: document.getElementById("productName").value,
-      price: document.getElementById("productPrice").value,
-      stock: document.getElementById("productStock").value,
-      image: document.getElementById("productImage").value
-    });
-
-    localStorage.setItem(
-      "lluisyProducts",
-      JSON.stringify(products)
-    );
-
-    form.reset();
-    showProducts();
+  const { data, error } = await db.auth.signInWithPassword({
+    email,
+    password
   });
 
-  showProducts();
+  if (error) {
+    message("Error: " + error.message);
+    return;
+  }
+
+  showAdmin();
+}
+
+async function logout() {
+  await db.auth.signOut();
+  document.getElementById("admin").classList.add("hidden");
+  document.getElementById("login").classList.remove("hidden");
+}
+
+function showAdmin() {
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("admin").classList.remove("hidden");
+  loadProducts();
+}
+
+function clearForm() {
+  ["productId", "name", "price", "category", "image", "description"]
+    .forEach(id => document.getElementById(id).value = "");
+}
+
+async function saveProduct() {
+  const id = document.getElementById("productId").value.trim();
+  const name = document.getElementById("name").value.trim();
+  const price = Number(document.getElementById("price").value);
+  const category = document.getElementById("category").value.trim();
+  const image = document.getElementById("image").value.trim();
+  const description = document.getElementById("description").value.trim();
+
+  if (!name || !Number.isFinite(price) || price < 0) {
+    alert("Introduce un nombre y un precio válido.");
+    return;
+  }
+
+  const product = { name, price, category, image, description };
+
+  let result;
+
+  if (id) {
+    result = await db.from(TABLE).update(product).eq("id", id);
+  } else {
+    result = await db.from(TABLE).insert(product);
+  }
+
+  if (result.error) {
+    alert("No se pudo guardar: " + result.error.message);
+    return;
+  }
+
+  alert("Producto guardado correctamente.");
+  clearForm();
+  loadProducts();
+}
+
+async function loadProducts() {
+  const container = document.getElementById("products");
+  container.innerHTML = "Cargando productos...";
+
+  const { data, error } = await db
+    .from(TABLE)
+    .select("*")
+    .order("id", { ascending: false });
+
+  if (error) {
+    container.textContent = "Error: " + error.message;
+    return;
+  }
+
+  container.innerHTML = "";
+
+  data.forEach(product => {
+    const div = document.createElement("div");
+    div.className = "product";
+
+    const title = document.createElement("h3");
+    title.textContent = product.name;
+    div.appendChild(title);
+
+    const details = document.createElement("p");
+    details.textContent =
+      "ID: " + product.id +
+      " | Precio: $" + product.price +
+      " | Categoría: " + (product.category || "");
+    div.appendChild(details);
+
+    const description = document.createElement("p");
+    description.textContent = product.description || "";
+    div.appendChild(description);
+
+    if (product.image) {
+      const img = document.createElement("img");
+      img.src = product.image;
+      img.alt = product.name;
+      div.appendChild(img);
+    }
+
+    const edit = document.createElement("button");
+    edit.textContent = "Editar";
+    edit.onclick = () => editProduct(product);
+    div.appendChild(edit);
+
+    const remove = document.createElement("button");
+    remove.textContent = "Eliminar";
+    remove.className = "danger";
+    remove.onclick = () => deleteProduct(product.id);
+    div.appendChild(remove);
+
+    container.appendChild(div);
+  });
+}
+
+function editProduct(product) {
+  document.getElementById("productId").value = product.id;
+  document.getElementById("name").value = product.name || "";
+  document.getElementById("price").value = product.price ?? "";
+  document.getElementById("category").value = product.category || "";
+  document.getElementById("image").value = product.image || "";
+  document.getElementById("description").value =
+    product.description || "";
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+async function deleteProduct(id) {
+  if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
+
+  const { error } = await db
+    .from(TABLE)
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    alert("Error al eliminar: " + error.message);
+    return;
+  }
+
+  alert("Producto eliminado.");
+  loadProducts();
+}
+
+async function checkSession() {
+  const { data } = await db.auth.getSession();
+
+  if (data.session) {
+    showAdmin();
+  }
+}
+
+checkSession();
 </script>
+</body>
+</html>
